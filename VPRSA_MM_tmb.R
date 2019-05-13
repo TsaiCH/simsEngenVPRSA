@@ -40,7 +40,7 @@ Type objective_function<Type>::operator() ()
 writeLines(engen.cpp,con="engen.cpp")
 compile("engen.cpp")
 dyn.load(dynlib("engen"))
-setwd('~/csv_sim_output/') # direct to the folder that stores csv output files of 100 simulation results for each scenario
+setwd('~/csv_sim_output/') # direct to the folder that stores csv output files of 100 simulation results for each scenario of community dynamics
 csvs <- list.files()
 parfix.all <- parrandom.all <- c()
 for(i in 1:length(csvs)){
