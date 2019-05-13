@@ -1,7 +1,7 @@
 ########################################################################################################################
 #### The mixed-effects model (MM) approach for estimating VPRSA
 #### see eq. 1-4 and eq. 14
-#### CAUTION: the space beofre the line is needed for C code template
+#### CAUTION: the space ahead of the line is needed for C code template before submitting to TMB compiler
 ########################################################################################################################
 library(TMB)
 library(methods)
