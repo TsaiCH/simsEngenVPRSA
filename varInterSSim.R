@@ -1,4 +1,5 @@
-tot.sim <- 1
+# varInterS scenarios of Gompertz-type communtiy dynamics
+tot.sim <- 1 # simulation number (100 time in total for the manuscript)
 source('SAD_pBoot_functions_zeta_final.R')
 require(compiler)
 require(poilog)
@@ -9,7 +10,7 @@ cmp_PoiLogFit_fn <- cmpfun(PoiLogFit_fn)
 print(Sys.time())
 sigma.E <- seq(0.05,1,length.out=40) # magnitude in environmental variance varies across 40 reefs
 ABE.list <- vector("list",40)
-nsp <- 100
+nsp <- 100 # "true" species richness
 fit.data.all <- A.allsim <- E.allsim <- D.allsim <- c()
 for(k in 1:length(sigma.E)){
 nrepeat <- 1
@@ -17,11 +18,11 @@ repeat{
   print(paste("Sim Reef=",k,sep=''))
   repeat
   {
-    alpha <- runif(nsp*(nsp-1)*0.5,0,0.002) # nsp-1 species in total will have ~60% strength of intra-specific density dependence of sp i (~0.001*99/0.16)
+    alpha <- runif(nsp*(nsp-1)*0.5,0,0.002) # nsp-1 species in total will have ~60% strength of intra-specific density dependence of species i (~0.001*99/0.16)
     B <- matrix(1,nsp,nsp)
     B[upper.tri(B)] <- alpha
     B[lower.tri(B)] <- alpha
-    diag(B) <- 0.84  # mean strength of intra-specific density dependence ~ 1-0.84 = 0.16
+    diag(B) <- 0.84  # strength of intra-specific density dependence ~ 1-0.84 = 0.16 as per the baseline model
     eig <- eigen(B)$value
     unit <- Re(eig)^2+Im(eig)^2
     if(all(unit<0.99))
@@ -32,7 +33,7 @@ repeat{
   A <- rnorm(nsp,1.5,0.25)  # normally distributed intrinsic growth rate on log scale (intrinsic species differences)
   ABE.list[[k]][[1]] <- A
   ABE.list[[k]][[2]] <- B
-  varNhat <- var(solve(diag(rep(1,nrow(B)))-B)%*%A) # Variance of deterministic part equilibrium abundances
+  varNhat <- var(solve(diag(rep(1,nrow(B)))-B)%*%A) # Variance of deterministic part equilibrium abundances (var of N*)
   varSigma <- rep(0.5,nsp)
   require(matrixcalc)
   # WARNING! the intensive computation of following environmental variance (varEnv) (see Ives et al. 2003 for the matrix solution)
@@ -45,20 +46,20 @@ repeat{
   for(i in 1:1000)
   {
     varSigma <- rep(0.5,nsp) # no speceies differences in environmental variance as per the baseline model
-    D <- matrix(rnorm(nsp,0,0.5),nsp,1)/exp(X) # Demographic stochasticity
+    D <- matrix(rnorm(nsp,0,sqrt(0.5)),nsp,1)/sqrt(exp(X)) # Demographic stochasticity
     E <- matrix(mvrnorm(1,rep(0,nsp),diag(varSigma*sigma.E[k])),nsp,1) # Environmental stochasticity  
     X <- A+B%*%X+E+D
     E.all <- cbind(E.all,E)
     D.all <- cbind(D.all,D)
     X.all <- cbind(X.all,X)
   }
-  rSAD_gompertz <- tail(t(X.all),11) # time-series time window = 11 (comparable to LTMP data), simulated 'true' species abundance
+  rSAD_gompertz <- tail(t(X.all),11) # time-series time window = 11 years (comparable to LTMP data), simulated 'true' species abundance
   SAD_time <- cmp_pBootSAD_fn(rSAD_gompertz,totalN=1500)$SAD_time # Poisson sampling from simulated 'true' species abundance
   SAD_time[is.na(SAD_time)] <- 0 
   nspcheck <- apply(SAD_time,2,function(x){sum(length(which(x!=0)))})
   nrepeat <- nrepeat+1
   if(all(nspcheck>(nsp*0.4))){
-    print(paste("Observed (sampled) richness > 40 species for all 11 years",sep=""))
+    print(paste("Observed (sampled) richness > 40 for all years",sep=""))
     break 
   }
   else if(nrepeat>30){
@@ -67,7 +68,7 @@ repeat{
   }
   else{print(paste("Warning: sampling intensity should be increased !!! nrepeat = ",nrepeat,sep=""))}
 }
-  if(nrepeat>=30){
+  if(nrepeat>30){
     fitout <- cmp_PoiLogFit_fn(NA)
   }
   else{
