@@ -1,4 +1,5 @@
-tot.sim <- 1
+### varEnv scenario of Gompertz-type community dynamics
+tot.sim <- 1 # simulation number (100 times in total for the manuscript)
 source('SAD_pBoot_functions_zeta_final.R')
 require(compiler)
 require(poilog)
@@ -8,7 +9,7 @@ cmp_PoiLogFit_fn <- cmpfun(PoiLogFit_fn)
 #
 print(Sys.time())
 sigma.E <- seq(0.05,1,length.out=40) # magnitude in environmental variance varies across 40 reefs
-nsp <- 100
+nsp <- 100 # species richness
 fit.data.all <- A.allsim <- E.allsim <- D.allsim <- c()
 for(k in 1:length(sigma.E)){
 nrepeat <- 1
@@ -31,15 +32,15 @@ repeat{
   X.all <- E.all <- D.all <- c()
   for(i in 1:1000)
   {
-    varSigma <- runif(nsp,0,1) # uniformly distributed species differences in environmental variances (the mean value is equal to the constant in baseline model)
-    D <- matrix(rnorm(nsp,0,0.5),nsp,1)/exp(X) # Demographic stochasticity
+    varSigma <- runif(nsp,0,1) # uniformly distributed species differences in environmental variances (the mean value 0.5 is equal to the constant in the baseline model)
+    D <- matrix(rnorm(nsp,0,sqrt(0.5)),nsp,1)/sqrt(exp(X)) # Demographic stochasticity
     E <- matrix(mvrnorm(1,rep(0,nsp),diag(varSigma*sigma.E[k])),nsp,1) # Environmental stochasticity  
     X <- A+B%*%X+E+D
     E.all <- cbind(E.all,E)
     D.all <- cbind(D.all,D)
     X.all <- cbind(X.all,X)
   }
-  rSAD_gompertz <- tail(t(X.all),11) # time-series time window = 11 (comparable to LTMP data), simulated 'true' species abundance
+  rSAD_gompertz <- tail(t(X.all),11) # time-series time window = 11 years (comparable to LTMP data), simulated 'true' species abundance
   SAD_time <- cmp_pBootSAD_fn(rSAD_gompertz,totalN=1500)$SAD_time # Poisson sampling from simulated 'true' species abundance
   SAD_time[is.na(SAD_time)] <- 0 
   nspcheck <- apply(SAD_time,2,function(x){sum(length(which(x!=0)))})
@@ -54,7 +55,7 @@ repeat{
   }
   else{print(paste("Warning: sampling intensity should be increased !!! nrepeat = ",nrepeat,sep=""))}
 }
-  if(nrepeat>=30){
+  if(nrepeat>30){
     fitout <- cmp_PoiLogFit_fn(NA)
   }
   else{ 
