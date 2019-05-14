@@ -36,7 +36,7 @@ repeat{
   varNhat <- var(solve(diag(rep(1,nrow(B)))-B)%*%A) # Variance of deterministic part equilibrium abundances (var of N*)
   varSigma <- rep(0.5,nsp)
   require(matrixcalc)
-  # WARNING! the intensive computation of following environmental variance (varEnv) (see Ives et al. 2003 for the matrix solution)
+  # WARNING! intensive computation of the following environmental variance (varEnv) (see Ives et al. 2003 for the matrix solution)
   varcovEnv <- matrix(solve(diag(1,nrow(B)^2)-kronecker(B,B))%*%vec(diag(varSigma*sigma.E[k])),nsp,nsp)
   varEnv <- diag(varcovEnv) # species' environmental variances after adjusting density dependences
   varEnv.m <- mean(varEnv) # averaged (true) speceis' environmental variances 
