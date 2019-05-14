@@ -1,6 +1,6 @@
 #####################################################################################################################
 #### Function for generating Poisson sampling of species-abundance distributions (Connolly et al. 2009)
-#### rSAD_gompertz: simulated log-abundances of species over time
+#### rSAD_gompertz: simulated "true" log-abundances of species over time
 #### totalN: total number of individuals as Poisson sampling intensity
 ###################################################################################################################
 pBootSAD_fn <- function(rSAD_gompertz,totalN=1500)
@@ -32,7 +32,7 @@ pBootSAD_fn <- function(rSAD_gompertz,totalN=1500)
 ###################################################################################################################
 PoiLogFit_fn <- function(SADdat)
 {
-  require(poilog)
+  require(poilog) # Engen et al. 2002, 2011
   nlag <- ncol(SADdat) 
   parms1<-parms2<-parms3<-parms4<-parms5<-parms6<-parms7<-parms8<-parms9<-parms10<-c()         
   for(m in 1:nlag){
