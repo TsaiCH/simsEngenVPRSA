@@ -1,4 +1,4 @@
-### This model is the baseline model for all other scenarios of community dynamics
+### This fixIntra is the baseline model for all other scenarios of community dynamics
 tot.sim <- 1 # the simulaiton number (100 times in the manuscript)
 source('SAD_pBoot_functions_zeta_final.R')
 require(compiler)
