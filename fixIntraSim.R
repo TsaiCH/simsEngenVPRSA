@@ -46,7 +46,7 @@ repeat{
   nspcheck <- apply(SAD_time,2,function(x){sum(length(which(x!=0)))})
   nrepeat <- nrepeat+1
   if(all(nspcheck>(nsp*0.4))){
-    print(paste("Observed (sampled) richness > 40 for all years",sep=""))
+    print(paste("Observed (sampled) richness > 40 for 11 years",sep=""))
     break 
   }
   else if(nrepeat>30){
