@@ -1,5 +1,7 @@
 # simsEngenVPRSA
-R codes for simulations of community dynamics and tests for robustness of inferences drawn from VPRSA. 
+R codes for simulations of community dynamics and tests for robustness of inferences drawn from VPRSA.
+
+References:
 
 Engen, S., Lande, R., Walla, T., & DeVries, P. J. (2002). Analyzing spatial structure of communities using the two-dimensional Poisson lognormal species abundance model. The American Naturalist, 160(1), 60-73.
 
