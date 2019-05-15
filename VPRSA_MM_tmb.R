@@ -1,5 +1,5 @@
 ########################################################################################################################
-#### The mixed-effects model (MM) approach for estimating VPRSA
+#### The mixed-effects model (MM) approach for estimating VPRSA (cf. IML approach of Engen et al. 2002)
 #### see eq. 1-4 and eq. 14
 #### CAUTION: the space ahead of the line is needed for C code template before submitting to TMB compiler
 ########################################################################################################################
