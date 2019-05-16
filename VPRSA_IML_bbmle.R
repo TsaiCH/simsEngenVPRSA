@@ -8,7 +8,8 @@ library(bbmle)
 LL <- function(loginit=log(0.95), logasymp=log(0.6), logdelta=log(0.1), logsig=log(0.01)) {
   -sum(stats::dnorm(rho, mean=(exp(loginit)-exp(logasymp))*exp(-exp(logdelta)*lag)+exp(logasymp), sd=exp(logsig), log=TRUE))
 }
-setwd('~/csv_sim_output/') # direct to the folder that stores csv output files of 100 simulation results for each scenario of community dynamics
+# direct to the folder that stores csv output files of 100 simulation results for each scenario of community dynamics
+setwd('~/csv_sim_output/') 
 csvs <- list.files()
 MLEreefDATA.out <- c()
 for(j in 1:length(csvs)){
@@ -34,7 +35,8 @@ for(j in 1:length(csvs)){
   }
   MLEreefDATA.out <- rbind(MLEreefDATA.out,MLEreef.out)
 }
-write.csv(MLEreefDATA.out,"~/MLEreefDATA_scenarioName.csv",row.names=FALSE) # ouput the IML estimation of VPRSA for 100 simulation results of a given scenario
+# ouput the IML estimation of VPRSA of 100 simulation results given the scenario
+write.csv(MLEreefDATA.out,"~/MLEreefDATA_scenarioName.csv",row.names=FALSE)
 
 
 
